@@ -77,7 +77,7 @@ HYBRID_CONFIG = {
     'conf_threshold_frcnn': 0.35,   # Minimum confidence for Faster R-CNN detections to be considered
     'conf_threshold_yolo': 0.25,    # Minimum confidence for YOLOv8 detections to be considered
     'weights': [0.5, 0.5],          # Weights assigned to Faster R-CNN and YOLOv8 outputs in WBF (sum should ideally be 1.0)
-    'conf_threshold_wbf': 0.15      # Minimum confidence for a *fused* box to be a final detection
+    'conf_threshold_wbf': 0.3      # Minimum confidence for a *fused* box to be a final detection
 }
 Usage
 Place your models and test images in the appropriate directories as described in Setup.
