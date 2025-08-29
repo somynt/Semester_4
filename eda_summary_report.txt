@@ -1,0 +1,30 @@
+COMPREHENSIVE EDA REPORT: Training Set
+================================================================================
+
+DATASET OVERVIEW:
+----------------------------------------
+Total Images: 300
+Images with Target Objects: 300 (100.0%)
+Total Target Annotations: 2,438
+Average Objects per Image: 8.13
+Most Common Class: person (1,350 instances)
+Class Imbalance Ratio: 103.8:1
+Average Object Area: 8974 pixels²
+Median Object Area: 1050 pixels²
+Average Aspect Ratio: 1.15
+Area Standard Deviation: 24927 pixels²
+
+COMPARISON WITH Validation Set:
+----------------------------------------
+Chi-square p-value: 0.245913
+Jensen-Shannon Distance: 0.021
+
+GENERATED VISUALIZATIONS:
+----------------------------------------
+1. dataset_image_composition.png - Image composition analysis
+2. object_density_histogram.png - Objects per image distribution
+3. advanced_class_distribution.png - Comprehensive class analysis
+4. spatial_properties_analysis.png - Spatial characteristics
+5. correlation_matrix.png - Feature correlations
+6. class_cooccurrence_analysis.png - Co-occurrence patterns
+7. advanced_dataset_comparison.png - Dataset comparison
