@@ -1,43 +1,66 @@
-COCO Dataset: Focused Object Detection & Segmentation
-Project Overview
-This project demonstrates a complete machine learning workflow, from data analysis and preparation to model training and evaluation. The primary goal was to develop a highly efficient and accurate object detection and instance segmentation model tailored for a specific subset of the COCO dataset.
+# Object Detection & Instance Segmentation on COCO (YOLOv8)
 
-Methodology
-The project's methodology was deliberately data-centric, focusing on creating an optimized and streamlined pipeline.
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/somynt/Semester_4/blob/main/RAssignment280825.ipynb)
 
-Exploratory Data Analysis (EDA): A detailed analysis of the raw COCO dataset was performed to understand key characteristics, including class distribution, object size, and spatial relationships. This initial step was crucial for identifying challenges such as class imbalance and for informing our model selection.
+Training a YOLOv8 segmentation model to find and outline **people, cars, dogs and cakes** in everyday photos from the COCO 2017 dataset, with a data-first workflow: explore the data, clean and filter it, then train and tune.
 
-Dataset Filtering: The raw dataset was filtered to include only a predefined list of desired categories (e.g., person, car, dog). This strategic step significantly reduced the dataset size, leading to faster training and a more focused model. The coco_filter_and_analyze.py script was used for this process.
+**Skills shown:** computer vision · exploratory data analysis · data cleaning pipelines · YOLOv8 (Ultralytics) · hyperparameter tuning · model evaluation (mAP)
 
-Model Selection & Training: A modern, single-stage detection model was chosen for its balance of high accuracy and computational efficiency. The model was trained on the filtered dataset with a comprehensive hyperparameter tuning process to achieve optimal performance.
+---
 
-Key Results
-The final model's performance was rigorously validated, confirming the success of the methodology.
+## Results
 
-Overall Performance:
+Validation set: 861 images, 7,581 labelled objects.
 
-Box mAP50: 44.1%
+| Class | Box mAP50 | Mask mAP50 |
+|---|---|---|
+| dog | 0.58 | 0.49 |
+| person | 0.52 | 0.42 |
+| car | 0.46 | 0.38 |
+| cake | 0.21 | 0.20 |
+| **All classes** | **0.44** | **0.37** |
 
-Mask mAP50: 37.5%
+Inference speed: about 0.6 ms per image on an NVIDIA A100 GPU.
 
-Per-Class Performance: The model performed exceptionally well on high-frequency classes like person and car, with high precision and recall. Performance on low-frequency classes, such as cake, was understandably lower, highlighting the impact of class imbalance.
+**What this shows:** the model detects dogs, people and cars reasonably well. Cake is much weaker because it has far fewer examples and the objects are often small, partly hidden or clustered on tables. Masks score lower than boxes because tracing an exact outline is harder than drawing a box around an object.
 
-Efficiency: The model achieved an outstanding average inference speed of 0.9ms per image, making it highly suitable for real-time applications.
+## Approach
 
-Future Directions
-Future work will focus on further enhancing the model's performance and robustness. Potential areas for exploration include:
+1. **Exploratory data analysis:** class balance, objects per image, object sizes and positions, and which classes appear together. The EDA flagged a strong class imbalance (person far more common than the other classes) and many very small objects.
+2. **Cleaning and filtering:** kept only the four target classes, checked annotations for errors, and converted COCO polygons into YOLO segmentation format.
+3. **Training:** YOLOv8 segmentation model (pre-trained on COCO, fine-tuned here), 640 px images, with short tuning runs to choose training settings before the final training run.
+4. **Evaluation:** box and mask mAP per class, precision and recall.
 
-Applying advanced techniques (e.g., data augmentation or focal loss) to improve performance on low-frequency classes.
+## Example EDA charts
 
-Exploring the integration of attention mechanisms to refine feature extraction.
+| Train vs validation class balance (sample) | Object positions and sizes |
+|---|---|
+| ![](images/eda/dataset_comparison.png) | ![](images/eda/spatial_properties_analysis.png) |
 
-Scaling the methodology to larger, more complex datasets.
+More charts and a text summary are in [`images/eda/`](images/eda/).
 
-Getting Started
-To run the analysis yourself, ensure you have the required libraries installed. Place your COCO dataset in the specified paths and run the scripts in the following order:
+## How to run
 
-enhanced_coco_eda.py
+Built for **Google Colab with a GPU**.
 
-coco_filter_and_analyze.py
+1. Click the *Open in Colab* badge above and select a GPU runtime.
+2. Put the dataset zip in your Google Drive and update `DATASET_PATH` in the notebook to point to it.
+3. Run the cells in order: install packages, EDA, cleaning, conversion to YOLO format, training and evaluation.
 
-(Optional) Use the best.pt weights from your training run to perform inference on new images.
+## Repository contents
+
+| Path | Purpose |
+|---|---|
+| `RAssignment280825.ipynb` | Full pipeline: EDA, cleaning, YOLO conversion, training, evaluation |
+| `images/eda/` | EDA charts and summary report |
+| `images/samples/` | Example COCO images |
+
+## Limitations and next steps
+
+- The rare class (cake) needs more examples or targeted augmentation; class-weighted or focal loss could also help.
+- The smallest YOLOv8 variant was used for speed. A larger variant (`s` or `m`) would likely raise accuracy at some cost in speed.
+- The final cell of the notebook shows a formatting error when printing the summary *after* training finished; the results above come from the completed validation run shown just before it.
+
+---
+
+*MSc Data Science, University of Hertfordshire. COCO images © their respective Flickr owners under the [COCO terms of use](https://cocodataset.org/#termsofuse).*
